@@ -3,3 +3,6 @@ node_modules
 
 # build directory
 build
+
+# pycache
+scraper/**/__pycache__
