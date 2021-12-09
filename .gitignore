@@ -6,3 +6,5 @@ build
 
 # pycache
 scraper/**/__pycache__
+
+.vscode
