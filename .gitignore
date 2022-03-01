@@ -8,3 +8,5 @@ build
 scraper/**/__pycache__
 
 .vscode
+
+coverage
