@@ -1,9 +1,9 @@
-import { getProvinceMetadata } from "../src/v1/lib/helper";
+import { getProvinceMetadata } from '../src/v1/lib/helper';
 
-describe("Get province meta data", () => {
+describe('Get province meta data', () => {
   const getDummyObjectResult = (regenciesTotal: number, districtsTotal: number, villagesTotal: number) => ({ total_kabupaten: regenciesTotal, total_kecamatan: districtsTotal, total_desa: villagesTotal });
 
-  it("Blank or empty data (regencies, districts, villages)", () => {
+  it('Blank or empty data (regencies, districts, villages)', () => {
     const dummyObjectWithoutDistricts = { data_kabupaten: [] };
     const dummyObjectWithoutVillages = { data_kabupaten: [{ data_kecamatan: [] }] };
     const dummyObjectWithZeroVillages = { data_kabupaten: [{ data_kecamatan: [{ data_desa: [] }] }] };
