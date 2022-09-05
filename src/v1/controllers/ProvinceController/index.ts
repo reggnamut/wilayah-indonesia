@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { httpResponseCode } from "../../constants";
-import { callAllProvince, callOnlyProvinceByIdentifier } from "../../lib/libraries";
+import { Request, Response } from 'express';
+import { httpResponseCode } from '../../constants';
+import { callAllProvince, callOnlyProvinceByIdentifier } from '../../lib/libraries';
 
 export const ProvinceIndex = (req: Request, res: Response) => {
   const allProvincesData = callAllProvince();
@@ -16,7 +16,7 @@ export const ProvinceByIdentifier = (req: Request, res: Response) => {
   if (!allProvincesData)
     return res.status(404).json({
       ...httpResponseCode[404],
-      message: "There is nothing data for your requests",
+      message: `Provinsi dengan kode provinsi '${identifier}' tidak ditemukan!`,
       data: null,
     });
 
