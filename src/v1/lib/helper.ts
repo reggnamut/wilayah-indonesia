@@ -52,6 +52,16 @@ export function getRegencyTotalVillages(regency: any): number {
   return regencyTotalVillages;
 }
 
+export function getRegenciesFromProvince(province: any) {
+  if (!province?.data_kabupaten) return 0;
+  const clonedProvince = { ...province };
+  const regenciesWithMetadata = clonedProvince.data_kabupaten.map((regency: Object) => ({
+    ...removeDistrictsFromRegencies(regency),
+    ...getRegencyMetadata(regency),
+  }));
+  return regenciesWithMetadata;
+}
+
 export function getRegencyFromProvince(province: any, regencyIdentifier: number | string) {
   if (!province?.data_kabupaten) return 0;
   const clonedProvince = { ...province };
@@ -60,21 +70,36 @@ export function getRegencyFromProvince(province: any, regencyIdentifier: number 
   return regencyFilteredData || null;
 }
 
+export function getDistrictsFromRegency(province: any, regencyIdentifier: number | string) {
+  const regencyData = getRegencyFromProvince(province, regencyIdentifier);
+  if (!regencyData) return null;
+  const districtsData = [...regencyData.data_kecamatan].map((district) => {
+    const clonedDistrict = { ...district };
+    const districtTotalVillage: number = clonedDistrict.data_desa.length;
+    delete clonedDistrict.data_desa;
+    return {
+      ...clonedDistrict,
+      total_desa: districtTotalVillage,
+    };
+  });
+  return districtsData;
+}
+
 export function removeRegenciesFromProvince(province: any) {
-  if (!province?.data_kabupaten) throw Error("Undefined Province or Regencies!");
+  if (!province?.data_kabupaten) return null;
   const clonedProvinceData = { ...province };
   delete clonedProvinceData.data_kabupaten;
   return clonedProvinceData;
 }
 
 export function removeDistrictsFromProvince(province: any) {
-  if (!province?.data_kabupaten) throw Error("Undefined Province or Regencies!");
+  if (!province?.data_kabupaten) throw Error('Undefined Province or Regencies!');
   const clonedProvinceRegencies = [...province.data_kabupaten];
   return clonedProvinceRegencies.map((regency) => removeDistrictsFromRegencies(regency));
 }
 
 export function removeVillagesFromProvince(province: any) {
-  if (!province?.data_kabupaten) throw Error("Undefined Province or Regencies!");
+  if (!province?.data_kabupaten) throw Error('Undefined Province or Regencies!');
   const clonedProvinceRegencies = [...province.data_kabupaten];
   return clonedProvinceRegencies.map((regency) => {
     regency.data_kecamatan = regency.data_kecamatan.map((district: any) => removeVillagesFromDistricts(district));
@@ -90,7 +115,7 @@ export function removeDistrictsFromRegencies(regency: any) {
 }
 
 export function removeVillagesFromDistricts(district: any) {
-  if (!district?.data_desa) throw Error("Undefined Villages");
+  if (!district?.data_desa) throw Error('Undefined Villages');
   const clonedDistrictData = { ...district };
   delete clonedDistrictData.data_desa;
   return clonedDistrictData;
